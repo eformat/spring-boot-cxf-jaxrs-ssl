@@ -1,0 +1,40 @@
+spec:
+  replicas: 1
+  template:
+    spec:
+      volumes:
+        - name: config
+          configMap:
+            name: ${project.artifactId}
+            items:
+            - key: application.properties
+              path: application.properties
+        - name: secret-keystores
+          secret:
+            defaultMode: 420
+            secretName: spring-boot-cxf-jaxrs-keystores
+        - name: secret-passwords
+          secret:
+            defaultMode: 420
+            secretName: spring-boot-cxf-jaxrs-passwords
+      containers:
+        -
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+              scheme: HTTP
+            initialDelaySeconds: 180
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+              scheme: HTTP
+            initialDelaySeconds: 10
+          volumeMounts:
+            - mountPath: /etc/secret-keystores
+              name: secret-keystores
+            - mountPath: /etc/secret-passwords
+              name: secret-passwords
+            - name: config
+              mountPath: /deployments/config
