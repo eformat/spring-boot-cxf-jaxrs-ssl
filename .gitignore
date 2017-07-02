@@ -28,3 +28,5 @@ src/main/resources/client-keystore.jks
 src/main/resources/client-truststore.jks
 src/main/resources/signed-client.cer
 src/main/resources/codependent-client.p12
+password.txt
+.vscode/
