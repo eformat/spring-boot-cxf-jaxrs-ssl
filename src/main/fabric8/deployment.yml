@@ -13,10 +13,6 @@ spec:
           secret:
             defaultMode: 420
             secretName: spring-boot-cxf-jaxrs-keystores
-        - name: secret-passwords
-          secret:
-            defaultMode: 420
-            secretName: spring-boot-cxf-jaxrs-passwords
       containers:
         -
           livenessProbe:
@@ -34,7 +30,16 @@ spec:
           volumeMounts:
             - mountPath: /etc/secret-keystores
               name: secret-keystores
-            - mountPath: /etc/secret-passwords
-              name: secret-passwords
             - name: config
               mountPath: /deployments/config
+          env:
+            - name: KEY_STORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: spring-boot-cxf-jaxrs-passwords
+                  key: server.ssl.key-store-password
+            - name: TRUST_STORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: spring-boot-cxf-jaxrs-passwords
+                  key: server.ssl.key-store-password
